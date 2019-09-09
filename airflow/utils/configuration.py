@@ -37,8 +37,12 @@ def tmp_configuration_copy(chmod=0o600, include_env=True, include_cmds=True):
 
     with os.fdopen(temp_fd, 'w') as temp_file:
         # Set the permissions before we write anything to it.
-        if chmod is not None:
-            os.fchmod(temp_fd, chmod)
+        # WINHACK: chmod not allowed
+        try:
+            if chmod is not None:
+                os.fchmod(temp_fd, chmod)
+        except Exception as e:
+            print('fchmod fail: Windows?')
         json.dump(cfg_dict, temp_file)
 
     return cfg_path

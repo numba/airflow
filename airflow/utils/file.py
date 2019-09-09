@@ -45,7 +45,8 @@ def TemporaryDirectory(suffix='', prefix=None, dir=None):
         yield name
     finally:
         try:
-            shutil.rmtree(name)
+            # WINHACK: Trees frequently fail to remove due to open files
+            shutil.rmtree(name, ignore_errors=True)
         except OSError as e:
             # ENOENT - no such file or directory
             if e.errno != errno.ENOENT:

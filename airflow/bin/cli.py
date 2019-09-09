@@ -49,8 +49,13 @@ from tempfile import NamedTemporaryFile
 import json
 from tabulate import tabulate
 
-import daemon
-from daemon.pidfile import TimeoutPIDLockFile
+# WINHACK: This fails to import on Windows, but not needed for client-only usages
+try:
+    import daemon
+    from daemon.pidfile import TimeoutPIDLockFile
+except Exception as e:
+    print('Failed to import daemon module.  Are you on windows?')
+
 import io
 import psutil
 import re

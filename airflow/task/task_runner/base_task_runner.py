@@ -130,14 +130,18 @@ class BaseTaskRunner(LoggingMixin):
 
         self.log.info("Running on host: %s", get_hostname())
         self.log.info('Running: %s', full_cmd)
+        # WINHACK: run with git bash
+        full_cmd = ['bash', '-c', ' '.join(full_cmd).replace('\\','/')]
         proc = subprocess.Popen(
             full_cmd,
             stdout=subprocess.PIPE,
             stderr=subprocess.STDOUT,
             universal_newlines=True,
-            close_fds=True,
+            # WINHACK: not supported
+            #close_fds=True,
             env=os.environ.copy(),
-            preexec_fn=os.setsid
+            # WINHACK: not supported
+            #preexec_fn=os.setsid
         )
 
         # Start daemon thread to read subprocess logging output
