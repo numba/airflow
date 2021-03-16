@@ -32,8 +32,6 @@ import struct
 import sys
 from argparse import Namespace
 from datetime import datetime
-from fcntl import ioctl
-from termios import TIOCGWINSZ
 
 from airflow.models import Log
 from airflow.utils import cli_action_loggers
@@ -157,6 +155,8 @@ def should_use_colors(args):
 
 def get_terminal_size(fallback=(80, 20)):
     """Return a tuple of (terminal height, terminal width)."""
+    from fcntl import ioctl
+    from termios import TIOCGWINSZ
     try:
         return struct.unpack('hhhh', ioctl(sys.__stdout__, TIOCGWINSZ, '\000' * 8))[0:2]
     except IOError:
