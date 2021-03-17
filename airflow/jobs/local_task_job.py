@@ -166,3 +166,6 @@ class LocalTaskJob(BaseJob):
                 ti.task.on_success_callback(context)
             self.task_runner.terminate()
             self.terminating = True
+            # Workaround for non-terminating jobs, be more aggressive when
+            # shutting down.
+            import sys; sys.exit(0)
